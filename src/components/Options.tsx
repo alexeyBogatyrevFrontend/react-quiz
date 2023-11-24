@@ -3,7 +3,7 @@ import { QuestionsType } from '../App'
 
 type OptionsType = {
 	question: QuestionsType
-	dispatch: Dispatch<{ type: string }>
+	dispatch: Dispatch<{ type: string; payload?: number }>
 	answer: number | null
 }
 

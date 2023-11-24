@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 import Header from './components/Header'
 import Main from './components/Main'
 import Loader from './components/Loader'
@@ -214,7 +214,7 @@ const reducer = (state, action) => {
 			}
 
 		default:
-			throw new Error('Action unknown')
+			return 'Action unknown'
 	}
 }
 
