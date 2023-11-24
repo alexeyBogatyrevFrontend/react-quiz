@@ -6,7 +6,7 @@ import Error from './components/Error'
 import StartScreen from './components/StartScreen'
 import Question from './components/Question'
 
-export type QuestionType = {
+export type QuestionsType = {
 	question: string
 	options: string[]
 	correctOption: number
@@ -17,6 +17,9 @@ const initialState = {
 	questions: [],
 	// loading, error, ready, active, finished
 	status: 'loading',
+	index: 0,
+	answer: null,
+	points: 0,
 }
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -26,13 +29,29 @@ const reducer = (state, action) => {
 			return { ...state, status: 'error' }
 		case 'start':
 			return { ...state, status: 'active' }
+		case 'newAnswer': {
+			const question = state.questions[state.index]
+
+			return {
+				...state,
+				answer: action.payload,
+				points:
+					action.payload === question.correctOption
+						? state.points + question.points
+						: state.points,
+			}
+		}
+
 		default:
 			throw new Error('Action unknown')
 	}
 }
 
 const App = () => {
-	const [{ questions, status }, dispatch] = useReducer(reducer, initialState)
+	const [{ questions, status, index, answer }, dispatch] = useReducer(
+		reducer,
+		initialState
+	)
 
 	useEffect(() => {
 		const fetchingData = async () => {
@@ -57,7 +76,13 @@ const App = () => {
 				{status === 'ready' && (
 					<StartScreen numQuestions={questions.length} dispatch={dispatch} />
 				)}
-				{status === 'active' && <Question />}
+				{status === 'active' && (
+					<Question
+						question={questions[index]}
+						dispatch={dispatch}
+						answer={answer}
+					/>
+				)}
 			</Main>
 		</div>
 	)
