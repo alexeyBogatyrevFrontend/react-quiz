@@ -8,6 +8,7 @@ import Question from './components/Question'
 import NextButton from './components/NextButton'
 import Progress from './components/Progress'
 import FinishScreen from './components/FinishScreen'
+import Timer from './components/Timer'
 
 export type QuestionsType = {
 	question: string
@@ -24,6 +25,7 @@ const initialState = {
 	answer: null,
 	points: 0,
 	highscore: 0,
+	secondsRemaining: 300,
 }
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -63,14 +65,23 @@ const reducer = (state, action) => {
 		case 'restart':
 			return { ...initialState, questions: state.questions, status: 'ready' }
 
+		case 'timer':
+			return {
+				...state,
+				secondsRemaining: state.secondsRemaining - 1,
+				status: state.secondsRemaining === 0 ? 'finished' : state.status,
+			}
+
 		default:
 			throw new Error('Action unknown')
 	}
 }
 
 const App = () => {
-	const [{ questions, status, index, answer, points, highscore }, dispatch] =
-		useReducer(reducer, initialState)
+	const [
+		{ questions, status, index, answer, points, highscore, secondsRemaining },
+		dispatch,
+	] = useReducer(reducer, initialState)
 
 	useEffect(() => {
 		const fetchingData = async () => {
@@ -114,12 +125,15 @@ const App = () => {
 							dispatch={dispatch}
 							answer={answer}
 						/>
-						<NextButton
-							dispatch={dispatch}
-							answer={answer}
-							index={index}
-							numQuestions={questions.length}
-						/>
+						<footer>
+							<Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+							<NextButton
+								dispatch={dispatch}
+								answer={answer}
+								index={index}
+								numQuestions={questions.length}
+							/>
+						</footer>
 					</>
 				)}
 				{status === 'finished' && (
