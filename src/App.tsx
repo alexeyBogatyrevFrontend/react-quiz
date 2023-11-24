@@ -6,6 +6,7 @@ import Error from './components/Error'
 import StartScreen from './components/StartScreen'
 import Question from './components/Question'
 import NextButton from './components/NextButton'
+import Progress from './components/Progress'
 
 export type QuestionsType = {
 	question: string
@@ -55,7 +56,7 @@ const reducer = (state, action) => {
 }
 
 const App = () => {
-	const [{ questions, status, index, answer }, dispatch] = useReducer(
+	const [{ questions, status, index, answer, points }, dispatch] = useReducer(
 		reducer,
 		initialState
 	)
@@ -74,6 +75,11 @@ const App = () => {
 		fetchingData()
 	}, [])
 
+	const numPoints = questions.reduce(
+		(accum: number, item: QuestionsType) => (accum += item.points),
+		0
+	)
+
 	return (
 		<div className='app'>
 			<Header />
@@ -85,6 +91,13 @@ const App = () => {
 				)}
 				{status === 'active' && (
 					<>
+						<Progress
+							index={index}
+							numQuestions={questions.length}
+							points={points}
+							numPoints={numPoints}
+							answer={answer}
+						/>
 						<Question
 							question={questions[index]}
 							dispatch={dispatch}
