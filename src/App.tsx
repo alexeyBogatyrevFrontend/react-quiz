@@ -7,6 +7,7 @@ import StartScreen from './components/StartScreen'
 import Question from './components/Question'
 import NextButton from './components/NextButton'
 import Progress from './components/Progress'
+import FinishScreen from './components/FinishScreen'
 
 export type QuestionsType = {
 	question: string
@@ -22,6 +23,7 @@ const initialState = {
 	index: 0,
 	answer: null,
 	points: 0,
+	highscore: 0,
 }
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -50,16 +52,22 @@ const reducer = (state, action) => {
 		case 'nextQuestion':
 			return { ...state, index: state.index + 1, answer: null }
 
+		case 'finished':
+			return {
+				...state,
+				status: 'finished',
+				highscore:
+					state.points > state.highscore ? state.points : state.highscore,
+			}
+
 		default:
 			throw new Error('Action unknown')
 	}
 }
 
 const App = () => {
-	const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-		reducer,
-		initialState
-	)
+	const [{ questions, status, index, answer, points, highscore }, dispatch] =
+		useReducer(reducer, initialState)
 
 	useEffect(() => {
 		const fetchingData = async () => {
@@ -103,8 +111,20 @@ const App = () => {
 							dispatch={dispatch}
 							answer={answer}
 						/>
-						<NextButton dispatch={dispatch} answer={answer} />
+						<NextButton
+							dispatch={dispatch}
+							answer={answer}
+							index={index}
+							numQuestions={questions.length}
+						/>
 					</>
+				)}
+				{status === 'finished' && (
+					<FinishScreen
+						points={points}
+						numPoints={numPoints}
+						highscore={highscore}
+					/>
 				)}
 			</Main>
 		</div>
