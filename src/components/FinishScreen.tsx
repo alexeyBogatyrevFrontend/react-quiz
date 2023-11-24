@@ -26,7 +26,7 @@ const FinishScreen: FC<FinishScreenProps> = ({
 	return (
 		<>
 			<p className='result'>
-				<span>{emoji}</span> You sco red <strong>{points} </strong>
+				<span>{emoji}</span> You scored <strong>{points} </strong>
 				out of {numPoints} ({Math.ceil(calculatePercentage)}%)
 			</p>
 			<p className='highscore'>(Highscore: {highscore} points)</p>
