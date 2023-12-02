@@ -1,9 +1,20 @@
-import { useQuiz } from '../context/QuizContext'
+import { FC } from 'react'
 
-const Progress = () => {
-	const { questions, index, points, numPoints, answer } = useQuiz()
-	const numQuestions = questions.length
+type ProgressProps = {
+	index: number
+	numQuestions: number
+	points: number
+	numPoints: number
+	answer: number
+}
 
+const Progress: FC<ProgressProps> = ({
+	index,
+	numQuestions,
+	points,
+	numPoints,
+	answer,
+}) => {
 	return (
 		<header className='progress'>
 			<progress max={numQuestions} value={index + Number(answer !== null)} />

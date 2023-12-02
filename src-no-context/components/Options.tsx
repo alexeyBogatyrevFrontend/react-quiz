@@ -1,9 +1,13 @@
-import { useQuiz } from '../context/QuizContext'
+import { Dispatch, FC } from 'react'
+import { QuestionsType } from '../App'
 
-const Options = () => {
-	const { questions, dispatch, answer, index } = useQuiz()
-	const question = questions[index]
+type OptionsType = {
+	question: QuestionsType
+	dispatch: Dispatch<{ type: string; payload?: number }>
+	answer: number | null
+}
 
+const Options: FC<OptionsType> = ({ question, dispatch, answer }) => {
 	const hasAnswered = answer !== null
 
 	return (

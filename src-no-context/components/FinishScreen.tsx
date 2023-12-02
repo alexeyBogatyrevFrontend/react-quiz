@@ -1,8 +1,18 @@
-import { useQuiz } from '../context/QuizContext'
+import { Dispatch, FC } from 'react'
 
-const FinishScreen = () => {
-	const { points, numPoints, highscore, dispatch } = useQuiz()
+type FinishScreenProps = {
+	points: number
+	numPoints: number
+	highscore: number
+	dispatch: Dispatch<{ type: string }>
+}
 
+const FinishScreen: FC<FinishScreenProps> = ({
+	points,
+	numPoints,
+	highscore,
+	dispatch,
+}) => {
 	const calculatePercentage = (points / numPoints) * 100
 
 	let emoji
